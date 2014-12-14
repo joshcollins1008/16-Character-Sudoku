@@ -1,5 +1,7 @@
 {-# LANGUAGE GADTs, KindSignatures #-}
 
+module Game where
+
 --import Graphics.UI.GLUT
 --import Data.Vector
 import Data.List

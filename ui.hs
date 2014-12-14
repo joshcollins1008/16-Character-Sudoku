@@ -9,12 +9,14 @@ import Control.Concurrent
 import Data.Text
 
 import           Graphics.Blank
+import           Game
 
 main :: IO ()
 main = do
   blankCanvas 3000 { events = ["mousedown"] } $ \ context -> do
         forkIO $ viewer context
-        control_loop context
+        control_loop context puzzle1
+        return ()
 
 viewer :: DeviceContext -> IO ()
 viewer context = do
@@ -352,18 +354,24 @@ viewer context = do
         viewer context
 
 
-control_loop :: DeviceContext -> IO ()
-control_loop context = do
+control_loop :: DeviceContext -> [[Char]] -> IO [[Char]]
+control_loop context puzzle1 = do
 --        print page
         let (w,h) = (width context, height context)
         let sz = min w h
 
-        event <- wait context
---        print event
-        case ePageXY event of
-           -- if no mouse location, ignore, and redraw
-           Nothing -> control_loop context
-           Just (x',y') -> control_loop context
+        let charList = start puzzle1 -- :: [[[Char]]]
+
+        -- do stuff
+
+        control_loop context charList
+
+--        event <- wait context
+----        print event
+--        case ePageXY event of
+--           -- if no mouse location, ignore, and redraw
+--           Nothing -> control_loop context
+--           Just (x',y') -> control_loop context
 
 
 pageColor :: Text
@@ -390,22 +398,22 @@ smallLine (x,y) (x',y') = do
         stroke()
 
 
-charList :: [[Char]]
-charList = [
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
-           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f']
-         ]
+--charList :: [[Char]]
+--charList = [
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
+--           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f']
+--         ]
