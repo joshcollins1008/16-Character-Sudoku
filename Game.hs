@@ -32,7 +32,7 @@ minibox  _  = False
 -- Couple helpful data types to hold our information
 charList :: [[Char]]
 charList = [
-           [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',' ',' ',' ',' ',' ',' ',' ',' '],
+           ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
            ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
            ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
            ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f'],
@@ -101,13 +101,27 @@ test1 = [' ', ' ', ' ', '8',   '5', 'd', 'b', ' ',   ' ', 'e', '0', ' ',   ' ', 
 empty :: [Char]
 empty = []
 
--- Take a puzzle and return all possiblities
---solver :: [[Char]] -> [[[Char]]]
---solver a = map rowSolver a
+-- Return True if puzzle is solved
+isSolved :: [[Char]] -> Bool
+isSolved [] = True
+isSolved a = noSpaces (map spaceInRow a)
 
--- Take in the puzzle and return the list of possiblities for each place
---start :: [[Char]] -> [[[Char]]]
---start a = 
+noSpaces :: [Bool] -> Bool
+noSpaces [] = True
+noSpaces a = if (a !! 0 )
+                 then False
+                 else (noSpaces ( tail a ) )
+
+spaceInRow :: [Char] -> Bool
+spaceInRow [] = False
+spaceInRow a = if ( a !! 0 ) == ' '
+               then True
+               else spaceInRow (tail a )
+
+isSpace :: Char -> Bool
+isSpace ' ' = True
+isSpace _   = False
+
 
 check :: Char -> Bool
 check a = if a == ' '
