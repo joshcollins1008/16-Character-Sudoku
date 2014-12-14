@@ -126,9 +126,25 @@ getRowNum a b = if a == ( b !! 0 )
                 then 0
                 else (1 + getRowNum a (tail b))
 
-
+-- Generates master list of what cannot be done
 start :: [[Char]] -> [[[Char]]]
 start a = strongerUnion (getAllRowUnits a ) (getAllColumns a ) 
+
+fst4(x,_,_,_) = x
+
+getBoxes :: [[Char]] -> [[Char]]
+getBoxes []= []
+getBoxes a =  [
+                (fst (splitAt 4 ( a !! 0 ))) ++ (fst (splitAt 4 ( a !! 1 ))) ++ (fst (splitAt 4 ( a !! 2 ))) ++  (fst (splitAt 4 ( a !! 3 ))), 
+                (fst (splitAt 4 (snd (splitAt 4 ( a !! 0 ))))) ++ (fst ( splitAt 4 (snd (splitAt 4 ( a !! 1 ))))) ++ (fst ( splitAt 4 (snd (splitAt 4 ( a !! 2 )))))  ++  (fst ( splitAt 4 (snd (splitAt 4 ( a !! 3 ))))),
+                (fst (splitAt 4 (snd (splitAt 8 ( a !! 0 ))))) ++ (fst ( splitAt 4 (snd (splitAt 8 ( a !! 1 ))))) ++ (fst ( splitAt 4 (snd (splitAt 8 ( a !! 2 )))))  ++  (fst ( splitAt 4 (snd (splitAt 8 ( a !! 3 ))))),
+                (snd (splitAt 12 ( a !! 0 ))) ++ (snd (splitAt 12 ( a !! 1 ))) ++ (snd (splitAt 12 ( a !! 2 )))  ++  (snd (splitAt 12 ( a !! 3 )))
+
+              ] ++ getBoxes ( snd (splitAt 4 a) )
+
+--getBoxUnits :: [[Char]] -> [[[Char]]]
+--getBoxUnits [] = []
+--getBoxUnits b = getBoxUnits ( b !! 0 ) ++ getBoxes b
 
 --Pass in a puzzle get a list of all possible answers that
 --do not exist in the same row
@@ -141,7 +157,7 @@ getRowUnits a = copy2 16 (intersect a nonUsed)
 -- Return a list of all possiblities not in the same
 -- columns
 getAllColumns :: [[Char]] -> [[[Char]]]
-getAllColumns a = getAllRowUnits $ transpose a
+getAllColumns a = transpose $ getAllRowUnits $ transpose a
 
 
 -- Union all list of Char lists together
