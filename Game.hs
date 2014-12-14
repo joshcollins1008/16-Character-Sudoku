@@ -101,6 +101,20 @@ test1 = [' ', ' ', ' ', '8',   '5', 'd', 'b', ' ',   ' ', 'e', '0', ' ',   ' ', 
 empty :: [Char]
 empty = []
 
+-- This inverses the triple matrix to show the possible values
+-- rather than the values that cannot be in the matrix
+inverseList :: [[[Char]]] -> [[[Char]]]
+inverseList [] = []
+inverseList a =  [ inverseRow ( a !! 0 ) ] ++ ( inverseList ( tail a ) )
+
+inverseRow :: [[Char]] -> [[Char]]
+inverseRow [] = []
+inverseRow b = [(nonUsed \\ ( b !! 0 ))] ++ ( inverseRow (tail b ) )
+
+
+
+
+
 -- Return True if puzzle is solved
 isSolved :: [[Char]] -> Bool
 isSolved [] = True
@@ -144,7 +158,7 @@ getRowNum a b = if a == ( b !! 0 )
 
 -- Generates master list of what cannot be done
 start :: [[Char]] -> [[[Char]]]
-start a = strongerUnion ( strongerUnion (getAllRowUnits a ) (getAllColumns a ) ) (getAllBoxUnits a )
+start a = inverseList ( strongerUnion ( strongerUnion (getAllRowUnits a ) (getAllColumns a ) ) (getAllBoxUnits a ) )
 
 fst4(x,_,_,_) = x
 
