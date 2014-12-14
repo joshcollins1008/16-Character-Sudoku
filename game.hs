@@ -128,23 +128,29 @@ getRowNum a b = if a == ( b !! 0 )
 
 -- Generates master list of what cannot be done
 start :: [[Char]] -> [[[Char]]]
-start a = strongerUnion (getAllRowUnits a ) (getAllColumns a ) 
+start a = strongerUnion ( strongerUnion (getAllRowUnits a ) (getAllColumns a ) ) (getAllBoxUnits a )
 
 fst4(x,_,_,_) = x
 
+-- Function returns all boxes
 getBoxes :: [[Char]] -> [[Char]]
 getBoxes []= []
 getBoxes a =  [
-                (fst (splitAt 4 ( a !! 0 ))) ++ (fst (splitAt 4 ( a !! 1 ))) ++ (fst (splitAt 4 ( a !! 2 ))) ++  (fst (splitAt 4 ( a !! 3 ))), 
-                (fst (splitAt 4 (snd (splitAt 4 ( a !! 0 ))))) ++ (fst ( splitAt 4 (snd (splitAt 4 ( a !! 1 ))))) ++ (fst ( splitAt 4 (snd (splitAt 4 ( a !! 2 )))))  ++  (fst ( splitAt 4 (snd (splitAt 4 ( a !! 3 ))))),
-                (fst (splitAt 4 (snd (splitAt 8 ( a !! 0 ))))) ++ (fst ( splitAt 4 (snd (splitAt 8 ( a !! 1 ))))) ++ (fst ( splitAt 4 (snd (splitAt 8 ( a !! 2 )))))  ++  (fst ( splitAt 4 (snd (splitAt 8 ( a !! 3 ))))),
-                (snd (splitAt 12 ( a !! 0 ))) ++ (snd (splitAt 12 ( a !! 1 ))) ++ (snd (splitAt 12 ( a !! 2 )))  ++  (snd (splitAt 12 ( a !! 3 )))
-
+                intersect ( (fst (splitAt 4 ( a !! 0 ))) ++ (fst (splitAt 4 ( a !! 1 ))) ++ (fst (splitAt 4 ( a !! 2 ))) ++  (fst (splitAt 4 ( a !! 3 ))) ) nonUsed, 
+                intersect ( (fst (splitAt 4 (snd (splitAt 4 ( a !! 0 ))))) ++ (fst ( splitAt 4 (snd (splitAt 4 ( a !! 1 ))))) ++ (fst ( splitAt 4 (snd (splitAt 4 ( a !! 2 )))))  ++  (fst ( splitAt 4 (snd (splitAt 4 ( a !! 3 ))))) ) nonUsed,
+                intersect ( (fst (splitAt 4 (snd (splitAt 8 ( a !! 0 ))))) ++ (fst ( splitAt 4 (snd (splitAt 8 ( a !! 1 ))))) ++ (fst ( splitAt 4 (snd (splitAt 8 ( a !! 2 )))))  ++  (fst ( splitAt 4 (snd (splitAt 8 ( a !! 3 ))))) ) nonUsed,
+                intersect ( (snd (splitAt 12 ( a !! 0 ))) ++ (snd (splitAt 12 ( a !! 1 ))) ++ (snd (splitAt 12 ( a !! 2 )))  ++  (snd (splitAt 12 ( a !! 3 ))) ) nonUsed
               ] ++ getBoxes ( snd (splitAt 4 a) )
 
---getBoxUnits :: [[Char]] -> [[[Char]]]
---getBoxUnits [] = []
---getBoxUnits b = getBoxUnits ( b !! 0 ) ++ getBoxes b
+getAllBoxUnits :: [[Char]] -> [[[Char]]]
+getAllBoxUnits [] = []
+getAllBoxUnits b = 
+    [copy2 4 ( (getBoxes b) !! 0 ) ++ copy2 4 ( (getBoxes b) !! 1  ) ++ copy2 4 ( ( getBoxes b) !! 2  ) ++ copy2 4 ( ( getBoxes b ) !! 3 )] ++
+    [copy2 4 ( (getBoxes b) !! 0 ) ++ copy2 4 ( (getBoxes b) !! 1  ) ++ copy2 4 ( ( getBoxes b) !! 2  ) ++ copy2 4 ( ( getBoxes b ) !! 3 )] ++
+    [copy2 4 ( (getBoxes b) !! 0 ) ++ copy2 4 ( (getBoxes b) !! 1  ) ++ copy2 4 ( ( getBoxes b) !! 2  ) ++ copy2 4 ( ( getBoxes b ) !! 3 )] ++
+    [copy2 4 ( (getBoxes b) !! 0 ) ++ copy2 4 ( (getBoxes b) !! 1  ) ++ copy2 4 ( ( getBoxes b) !! 2  ) ++ copy2 4 ( ( getBoxes b ) !! 3 )] ++
+    getAllBoxUnits (snd ( splitAt 4 b ) ) 
+
 
 --Pass in a puzzle get a list of all possible answers that
 --do not exist in the same row
