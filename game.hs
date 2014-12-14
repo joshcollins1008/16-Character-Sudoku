@@ -1,8 +1,10 @@
 {-# LANGUAGE GADTs, KindSignatures #-}
 
 --import Graphics.UI.GLUT
-import Data.Vector
+--import Data.Vector
+import Data.List
 import Graphics.Blank
+--import qualified Data.Set as Set
 
 -- Check for valid characters to 16 character Sudoku
 minibox :: Char -> Bool
@@ -91,4 +93,118 @@ puzzle1 = [
            [' ', 'd', '8', ' ',   ' ', ' ', ' ', '7',   '5', ' ', ' ', ' ',   ' ', 'f', '4', ' ']
          ]
 
+test1 :: [Char]
+test1 = [' ', ' ', ' ', '8',   '5', 'd', 'b', ' ',   ' ', 'e', '0', ' ',   ' ', ' ', ' ', '7']
 
+empty :: [Char]
+empty = []
+
+-- Take a puzzle and return all possiblities
+--solver :: [[Char]] -> [[[Char]]]
+--solver a = map rowSolver a
+
+-- Take in the puzzle and return the list of possiblities for each place
+--start :: [[Char]] -> [[[Char]]]
+--start a = 
+
+check :: Char -> Bool
+check a = if a == ' '
+             then True
+             else False
+
+-- Check if it's in the row
+checkRow :: Char -> [Char] -> Bool
+checkRow _ [] = False
+checkRow a b  = if a == ( b !! 0 )
+                then True
+                else checkRow a (tail b)
+
+-- Check for the row number of a list
+getRowNum :: [Char] -> [[Char]] -> Int
+getRowNum _ [] = -17
+getRowNum a b = if a == ( b !! 0 )
+                then 0
+                else (1 + getRowNum a (tail b))
+
+
+start :: [[Char]] -> [[[Char]]]
+start a = strongerUnion (getAllRowUnits a ) (getAllColumns a ) 
+
+--Pass in a puzzle get a list of all possible answers that
+--do not exist in the same row
+getAllRowUnits :: [[Char]] -> [[[Char]]]
+getAllRowUnits a = map getRowUnits a
+
+getRowUnits :: [Char] -> [[Char]]
+getRowUnits a = copy2 16 (intersect a nonUsed)
+
+-- Return a list of all possiblities not in the same
+-- columns
+getAllColumns :: [[Char]] -> [[[Char]]]
+getAllColumns a = getAllRowUnits $ transpose a
+
+
+-- Union all list of Char lists together
+strongerUnion :: [[[Char]]] -> [[[Char]]] -> [[[Char]]]
+strongerUnion [] [] = []
+strongerUnion a b = [strongUnion ( a !! 0 ) ( b !! 0 ) ] ++ strongerUnion ( tail a ) ( tail b )
+
+-- Union all inididual Char lists together
+strongUnion :: [[Char]] -> [[Char]] -> [[Char]]
+strongUnion [] [] = []
+strongUnion a b = [union ( a !! 0 ) (b !! 0)] ++ strongUnion (tail a ) ( tail b )  
+
+--checkColumn :: Char -> [Char] -> Bool
+--checkColumn a b = if 
+
+--listColumn :: Int -> [Char]
+--listColumn x = 
+
+
+copy2 number item = [item | _ <- [ 1..number ]]
+
+
+
+
+
+--clearRow :: [Char] -> [Char]
+--clearRow a = 
+
+-- Contains all possible answers for all rows
+possiblities :: [[[Char]]]
+possiblities = [[[]]]
+
+
+
+nonUsed :: [Char]
+nonUsed = ['0', '1', '2', '3', '4', '5', '6', '7','8','9','a','b','c','d','e','f']
+
+--removeElement :: Char -> [Char] -> [Char]
+--removeElement a b = map checkElement a b
+
+checkElement :: Char -> Char -> Char
+checkElement a b = if a == b 
+                   then ' '
+                   else b
+
+
+
+--rowSolver :: [Char] -> [Char]
+--rowSolver a = map insertEle
+
+
+
+--insertElement :: Char -> Char
+--insertElement a = if a = ' ' do 
+usedElements :: [Char]
+usedElements = []
+
+-- Take a row and return it's possiblities
+--checkRow :: [Char] -> [Char]
+--checkRow a = 
+
+--
+getPossibilities :: Char -> [Char] -> [Char]
+getPossibilities a b = if a == ' '
+                       then b
+                       else delete a nonUsed
