@@ -15,7 +15,7 @@ import           Game
 main :: IO ()
 main = do
   blankCanvas 3000 { events = ["mousedown"] } $ \ context -> do
-        viewer context puzzle3
+        viewer context puzzle9
         return ()
         --forkIO $ viewer context charList
         --let charList = control_loop context puzzle1
@@ -354,10 +354,17 @@ viewer context charList = do
                 restore()
                 return (w,h,sz)
 
+        event <- wait context
+--        print event
+        case ePageXY event of
+           -- if no mouse location, ignore, and redraw
+           Nothing -> viewer context charList
+           Just (x',y') -> if (isSolved charList) then  viewer context charList else control_loop context charList
+
         --viewer context charList
-        if isSolved charList
-        then return charList
-        else control_loop context charList
+        --if isSolved charList
+        --then return charList
+        --else control_loop context charList
 
 
 control_loop :: DeviceContext -> [[Char]] -> IO [[Char]]
@@ -388,12 +395,14 @@ control_loop context puzz = do
         then print "yah"
         else print newCharList 
 
-        event <- wait context
---        print event
-        case ePageXY event of
-           -- if no mouse location, ignore, and redraw
-           Nothing -> control_loop context puzz
-           Just (x',y') -> viewer context newCharList
+        viewer context newCharList 
+
+--        event <- wait context
+----        print event
+--        case ePageXY event of
+--           -- if no mouse location, ignore, and redraw
+--           Nothing -> control_loop context puzz
+--           Just (x',y') -> viewer context newCharList
 
 
 
