@@ -156,9 +156,24 @@ getRowNum a b = if a == ( b !! 0 )
                 then 0
                 else (1 + getRowNum a (tail b))
 
+
+-- Take list of Chars and make a new puzzle with derived
+newPuzzle :: [[[Char]]] -> [[Char]]
+newPuzzle [] = []
+newPuzzle a = map newLine a
+
+newLine :: [[Char]] -> [Char]
+newLine [] = []
+newLine a = map newVariable a
+
+newVariable :: [Char] -> Char
+newVariable a = if ( (length a) > 1 )
+                then ' '
+                else ( a !! 0 )
+
 -- Generates master list of what cannot be done
 start :: [[Char]] -> [[[Char]]]
-start a = inverseList ( strongerUnion ( strongerUnion (getAllRowUnits a ) (getAllColumns a ) ) (getAllBoxUnits a ) )
+start a =  inverseList ( strongerUnion ( strongerUnion (getAllRowUnits a ) (getAllColumns a ) ) (getAllBoxUnits a ) ) 
 
 -- Take in current puzzle and replace all string with single characters
 -- where the original puzzle had answers

@@ -1,17 +1,15 @@
-nonUsed
-112 -- Check if it's in the row
-113 checkRow :: Char -> [Char] -> Bool
-114 checkRow _ [] = False
-115 checkRow a b  = if a == ( b !! 0 )
-116                 then True
-117                 else checkRow a (tail b)
+newPuzzle( derived puzzle1 (start puzzle1) )
+
+start puzzle1 // Takes a puzzle and returns all things it cannot be in that place
+derived puzzle1 (start puzzle1) // returns the list of all possible things that coudl go there
+newPuzzle (derived puzzle1 (start puzzle1 ) ) // Regenerates the original puzzle based off derived
+
+
 
 [" 62 a   5  1   4","   e   06c   3  ","0   8  cf 34 1 6"," dc  3 49 e0f82 "," 3  2 078     5e","17 68    42 b   ","408 9 6  d7e f 1","2 ba    0     8 "," 5     8    d9 0","7 8 5db  a 3 efc","   b e0    f3 57","10     7c5 e  a "," f691a 3b 7  d8 ","a 1 e2 fc  4   7","  c   b8e   5   ","3   5  9   8 f4 "]
 
 ["62a514","e06c3","08cf3416","dc349e0f82","320785e","176842b","40896d7ef1","2ba08","58d90","785dba3efc",
 "be0f357","107c5ea","f691a3b7d8","a1e2fc47","cb8e5","3598f4"]
-
-nonUsed \\ "a"
 
 
 -- Return true if no spaces
@@ -29,7 +27,7 @@ solved :: [[Char]] -> Bool
  79 
  80            [' ', '3', ' ', ' ',   '1', '7', ' ', '6',   '4', '0', '8', ' ',   '2', ' ', 'b', 'a'],
  81            ['2', ' ', '0', '7',   '8', ' ', ' ', ' ',   '9', ' ', '6', ' ',   ' ', ' ', ' ', ' '],
- 82            ['8', ' ', ' ', ' ',:   ' ', '4', '2', ' ',   ' ', 'd', '7', 'e',   '0', ' ', ' ', ' '],
+ 82            ['8', ' ', ' ', ' ',:   ' ', '4', '2', ' ',   ' ', 'd', '7', 'e',   '0', ' ', ' ', ''],
  83            [' ', ' ', '5', 'e',   'b', ' ', ' ', ' ',   ' ', 'f', ' ', '1',   ' ', ' ', '8', ' '],
  84 
  85            [' ', '5', ' ', ' ',   '7', ' ', '8', ' ',   ' ', ' ', ' ', 'b',   '1', '0', ' ', ' '],
@@ -40,4 +38,4 @@ solved :: [[Char]] -> Bool
  90            [' ', 'f', '6', '9',   'a', ' ', '1', ' ',   ' ', ' ', 'c', ' ',   '3', ' ', ' ', ' '],
  91            ['1', 'a', ' ', '3',   'e', '2', ' ', 'f',   ' ', ' ', 'b', '8',   '5', ' ', ' ', '9'],
  92            ['b', ' ', '7', ' ',   'c', ' ', ' ', '4',   'e', ' ', ' ', ' ',   ' ', ' ', ' ', '8'],
- 93            [' ', 'd', '8', ' ',   ' ', ' ', ' ', '7',   '5', ' ', ' ', ' ',   ' ', 'f', '4', ' ']
+ 93           [' ', 'd', '8', ' ',   ' ', ' ', ' ', '7',   '5', ' ', ' ', ' ',   ' ', 'f', '4', ' ']
