@@ -160,6 +160,18 @@ getRowNum a b = if a == ( b !! 0 )
 start :: [[Char]] -> [[[Char]]]
 start a = inverseList ( strongerUnion ( strongerUnion (getAllRowUnits a ) (getAllColumns a ) ) (getAllBoxUnits a ) )
 
+-- Take in current puzzle and replace all string with single characters
+-- where the original puzzle had answers
+derived :: [[Char]] -> [[[Char]]] -> [[[Char]]]
+derived [] [] = []
+derived a  b  = [ deriveRow ( a !! 0 ) ( b !! 0 ) ] ++ derived (tail a) ( tail b )
+
+deriveRow :: [Char] -> [[Char]] -> [[Char]]
+deriveRow [] [] = []
+deriveRow a b = if   ( a !! 0 ) == ' '
+                then [( b !! 0 )] ++ deriveRow (tail a) (tail b)
+                else [[ a !! 0 ]] ++ deriveRow (tail a) (tail b)
+
 fst4(x,_,_,_) = x
 
 -- Function returns all boxes
