@@ -8,17 +8,20 @@ import Control.Concurrent.STM
 import Control.Concurrent
 import Data.Text
 
+
 import           Graphics.Blank
 import           Game
 
 main :: IO ()
 main = do
   blankCanvas 3000 { events = ["mousedown"] } $ \ context -> do
-        forkIO $ viewer context charList
-        let charList = control_loop context puzzle1
+        viewer context puzzle2
         return ()
+        --forkIO $ viewer context charList
+        --let charList = control_loop context puzzle1
+        --return ()
 
-viewer :: DeviceContext -> [[Char]] -> IO ()
+viewer :: DeviceContext -> [[Char]] -> IO [[Char]]
 viewer context charList = do
         (w,h,sz) <- send context $ do
                 let (w,h) = (width context, height context)
@@ -351,20 +354,42 @@ viewer context charList = do
                 restore()
                 return (w,h,sz)
 
-        viewer context charList
+        --viewer context charList
+        control_loop context charList
 
 
 control_loop :: DeviceContext -> [[Char]] -> IO [[Char]]
-control_loop context puzzle1 = do
+control_loop context puzz = do
 --        print page
         let (w,h) = (width context, height context)
         let sz = min w h
 
-        let charList = newPuzzle ( derived puzzle1 (start puzzle1) )
+        print "puzz: "
+        print puzz
+        let charList = newPuzzle ( derived puzz (start puzz) )
+        print "charList:"
+        print charList
 
-        if isSolved charList
-          then return charList
-          else control_loop context charList
+        {- if(puzz == charList)
+          then let newCharList = changePuz charList
+          else let newCharList = charList -}
+
+        let newCharList = if (puzz == charList) 
+                          then changePuz charList
+                          else charList
+
+        if(charList == newCharList)
+        then print "nochange"
+        else print "newCharList: " 
+
+        if(charList == newCharList)
+        then print "yah"
+        else print newCharList 
+
+
+        if isSolved newCharList
+          then return newCharList
+          else viewer context newCharList--control_loop context charList
 
 --        event <- wait context
 ----        print event
@@ -372,6 +397,8 @@ control_loop context puzzle1 = do
 --           -- if no mouse location, ignore, and redraw
 --           Nothing -> control_loop context
 --           Just (x',y') -> control_loop context
+
+
 
 
 
